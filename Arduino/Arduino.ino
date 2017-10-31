@@ -20,9 +20,9 @@
 //#include "imumaths.h"
 
 //Declarations for temp readings
-#include <OneWire.h>
+//#include <OneWire.h>
 
-#include "DallasTemperature.h"
+//#include "DallasTemperature.h"
  
 // Data wire is plugged into pin 26 on the Arduino
 #define ONE_WIRE_BUS 3
