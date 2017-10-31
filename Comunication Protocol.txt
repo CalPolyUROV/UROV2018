@@ -1,0 +1,15 @@
+The UI message should aways start with “STR\n” followed by a character for first set of buttons “%c”, then a character for second set of buttons “%c”. After that, a number in string format (“%s”, int(num)) for the primary X, followed by space and a number in string format (“%s”, int(num)) for the primary Y. Then, after a space, the same format is used but for the secondary X and Y.
+
+STRa&360 30 20 -234
+
+
+The Arduino message should always start with “STR\n” followed by the number of lines to be read “%d\n”, then the label “%s\n” and then the data related to that “%d\n”. There can be multiple pairs of labels and data on the same message as long as the number of lines is correct. On the data line, it is also possible to send it on the format “%d,%d,%d\n”. On that example, there are multiple data related with a single label separated by commas. The amount of elements if not fixed. There should NOT be any strings or units on the data part. The units must be specified on the UI side. 
+
+STR   —Start of the Arduino message
+6     —lines to be read after this one
+PSR   —Label which defines what kind of data it is
+35    —Data
+ACL   —Label which defines what kind of data it is
+4,5,6 —Multiple data related with the label separated by commas
+GYR   —Label which defines what kind of data it is
+4,5,6 —Multiple data related with the label separated by commas
