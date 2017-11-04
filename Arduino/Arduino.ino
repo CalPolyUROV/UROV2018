@@ -1,4 +1,4 @@
-//#include <Adafruit_BNO055.h>
+
 
 #include <Servo.h>
 #include "Math.h"
@@ -8,21 +8,21 @@
 #include "gyroAccelerometer.h"
 #include <SoftwareSerial.h>
 #include <SPI.h>
-//#include "pressure.h"
+#include "pressure.h"
 #include <Wire.h>
 //#include "ComsMasterArd.h"
 #include "VectorMotors.h"
 #include "cameras.h"
 //#include "currentSensing.h"
 
-//#include "Adafruit_Sensor.h"
-//#include "Adafruit_BNO055.h"
-//#include "imumaths.h"
+#include "Adafruit_Sensor.h"
+#include "Adafruit_BNO055.h"
+#include "imumaths.h"
 
 //Declarations for temp readings
-//#include <OneWire.h>
+#include <OneWire.h>
 
-//#include "DallasTemperature.h"
+#include "DallasTemperature.h"
  
 // Data wire is plugged into pin 26 on the Arduino
 #define ONE_WIRE_BUS 3
@@ -64,7 +64,7 @@ int serialWritePin = 2; //this is the pin to control whethgeter it is recieving 
 //
 //////////////////////////////////
 
-ComsMasterArd coms;
+//CHANGE//ComsMasterArd coms;
 //QuadMotorShields md;//Not being used anymore
 bool pressure = false;
 bool voltage = false;
@@ -203,8 +203,8 @@ void writeToCommand(Input i){
   Serial3.print(numberOfLines); //print the number of lines of input the python program can read in three digits
   if (pressure) {
 	  Serial3.println("PSR"); //tell it the next line is Pressure
-    coms.sendSlaveCmd(GET_PRES);
-	  Serial3.print(coms.getSlaveData());
+    //coms.sendSlaveCmd(GET_PRES);
+	  //Serial3.print(coms.getSlaveData());
 	  Serial3.println(" mbars");
   }
   if (voltage) {
@@ -232,20 +232,20 @@ void writeToCommand(Input i){
     Serial3.println((int)(euler.x()));
     //Serial3.println(coms.getSlaveData());
     
-    //coms.sendSlaveCmd(GET_PCH);
+    //CHANGE//coms.sendSlaveCmd(GET_PCH);
     Serial3.println("PCH");
     Serial3.println((int)(euler.y()));
     
     Serial.println((int)(euler.y()));
     
-    //coms.sendSlaveCmd(GET_ROL);
+    //CHANGE//coms.sendSlaveCmd(GET_ROL);
     Serial3.println("ROL");
     Serial3.println((int)(euler.z()));
 
 
     if(debug){
       
-    //coms.sendSlaveCmd(GET_YAW);
+    //CHANGE//coms.sendSlaveCmd(GET_YAW);
     //Serial.println("YAW");
     //yaw = coms.getSlaveData();
     /*
@@ -286,8 +286,8 @@ void writeToCommand(Input i){
   }
   if (depth) {
 	  Serial3.println("DPT"); //tell it the next line is Depth
-    coms.sendSlaveCmd(GET_DEPT);
-	  Serial3.print(coms.getSlaveData());
+    //CHANGE//coms.sendSlaveCmd(GET_DEPT);
+	  //CHANGE//Serial3.print(coms.getSlaveData());
 	  Serial3.println(" feet");
   }
 }
