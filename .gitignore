@@ -31,4 +31,4 @@
 *.out
 *.app
 *.xml
-Arduino/.idea/workspace.xml
+Arduino/.idea/*
