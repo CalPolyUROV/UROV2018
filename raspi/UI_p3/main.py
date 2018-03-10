@@ -195,10 +195,11 @@ while True:
             outbound.write(" ")
 
     except serial.serialutil.SerialException:
+        print("WARN: SerialException while sending STR, no_serial = True")
         no_serial = True
 
-    except:
-        print("WARN: Crashed while sending controller input")
+    except Exception as error:
+        print("WARN: Exception while sending STR", error)
 
     try:
         if (not no_serial):
