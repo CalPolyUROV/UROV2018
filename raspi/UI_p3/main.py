@@ -131,7 +131,7 @@ while True:
             if(port != None):
                 outbound = serial.Serial(
                     port=port,
-                    baudrate=115200,
+                    baudrate=9600,
                     parity=serial.PARITY_NONE,   # parity is error checking, odd means the message should have an odd number of 1 bits
                     stopbits=serial.STOPBITS_ONE,
                     bytesize=serial.EIGHTBITS,   # eight bits of information per pulse/packet
