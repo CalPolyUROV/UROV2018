@@ -33,7 +33,7 @@ start = 0
 
 procs = []
 
-st = True
+timer_started = True
 
 p_factor = 1
 
@@ -210,9 +210,9 @@ while True:
                 if outbound.readable():
                     if "STR" == outbound.read(3):
                         proceed = True
-                        if st:
+                        if timer_started:
                             start = time.time()
-                            st = False
+                            timer_started = False
                         break
 
             if(proceed):                                            # Reads the serial line.
@@ -244,9 +244,9 @@ while True:
 
             else:
                 print("WARN: No Response From Arduino")
-                if not st:
+                if not timer_started:
                     end = time.time()
-                    st = True
+                    timer_started = True
                     print("INFO: Lost data after" + ("%.2f" % (end - start)) + "seconds")
 
     except serial.serialutil.SerialException:
