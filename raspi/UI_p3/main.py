@@ -57,7 +57,7 @@ while (len(ports) == 0 or port == None):
     port = serial_finder.find_port(ports)
     UI.shouldQuit()
     cont.update()
-    if(cont.getButton(2)):
+    if(cont.getButton(2)):  # press button to enter demo mode?
         no_serial = True
         break
 
