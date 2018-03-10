@@ -178,21 +178,19 @@ while True:
 
     try:
         if(not no_serial):
-            outbound.write("STR") #  sends a signal to tell that this is the start of data
-            #print("STR")
-            outbound.write(chr(buttons1))# writes the buttons first
-            outbound.write(chr(buttons2))
-
-            outbound.write(str(int(cont.getPrimaryX() * p_factor)))# casts the floats to ints, then to strings for simple parsing
-            outbound.write(" ")
-            outbound.write(str(int(cont.getPrimaryY() * p_factor)))
-            outbound.write(" ")
-            outbound.write(str(int(cont.getSecondaryX() * p_factor)))
-            outbound.write(" ")
-            outbound.write(str(int(cont.getSecondaryY() * p_factor)))
-            outbound.write(" ")
-            outbound.write(str(int(AutoPilot.CalcAltitude(cont.getTriggers(), p_factor))))
-            outbound.write(" ")
+            outbound.write("STR".encode()) #  sends a signal to tell that this is the start of data
+            outbound.write(chr(buttons1).encode())# writes the buttons first
+            outbound.write(chr(buttons2).encode())
+            outbound.write(str(int(cont.getPrimaryX() * p_factor)).encode())# casts the floats to ints, then to strings for simple parsing
+            outbound.write(" ".encode())
+            outbound.write(str(int(cont.getPrimaryY() * p_factor)).encode())
+            outbound.write(" ".encode())
+            outbound.write(str(int(cont.getSecondaryX() * p_factor)).encode())
+            outbound.write(" ".encode())
+            outbound.write(str(int(cont.getSecondaryY() * p_factor)).encode())
+            outbound.write(" ".encode())
+            outbound.write(str(int(AutoPilot.CalcAltitude(cont.getTriggers(), p_factor))).encode())
+            outbound.write(" ".encode())
 
     except serial.serialutil.SerialException:
         print("WARN: SerialException while sending STR, no_serial = True")
