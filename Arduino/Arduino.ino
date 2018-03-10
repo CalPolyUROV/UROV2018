@@ -150,7 +150,7 @@ void wait() {
 //except for input such as SSTR, that will be skipped. There should be multiple characters to
 //prevent random bytes getting past
 void waitForStart() {
-  return;  //short circuit
+  //return;  //short circuit
   while (true) {
     wait();
     if ('S' == Serial3.read()) {
