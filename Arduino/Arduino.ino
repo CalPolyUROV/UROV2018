@@ -69,7 +69,7 @@ int serialControlPin = 29; //this is the pin to control whethgeter it is recievi
 bool reportPressure = false;
 bool reportVoltage = false;
 bool reportTemperature = false;
-bool reportAccel = false; // to be used in 2018
+bool reportAccel = true; // to be used in 2018
 bool reportDepth = false;
 bool reportYPR = false; //to be used in 2018
 bool reportAmperage = false;
@@ -143,7 +143,7 @@ void setup() {
 
 //looks cleaner than the empty while loop being everywhere in the code
 void wait() {
-  while (!Serial3.available());
+  while (!(Serial3.available() > 0));
 }
 
 //detects the start signal without accidently overshooting it because of short circuting logic
@@ -158,7 +158,8 @@ void waitForStart() {
       if ('T' == Serial3.read()) {
         wait();
         if ('R' == Serial3.read()) {
-          break;
+          //break;
+          return;
         }
       }
     }
@@ -336,9 +337,9 @@ void debugInput(Input i) {
 
 void loop()
 {
-  Serial.print("Starting loop: ");
+  Serial.print("Starting loop code: serial3 avaiable:");
   Serial.println(Serial3.available());
-  if (Serial3.available())
+  if (Serial3.available() > 0)
   {
     waitForStart();
     Input i = readBuffer();
