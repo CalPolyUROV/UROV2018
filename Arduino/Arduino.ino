@@ -37,7 +37,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055();
 
 //all pins used must be listed here! either as a variable to change quickly later or as a comment if it is in another file
 
-int serialControlPin = 29; //this is the pin to control whethgeter it is recieving or sending
+//int serialControlPin = 29; //this is the pin to control whethgeter it is recieving or sending
 
 // I2C pins 20 and 21 for BNO055
 // SDA, SCL to
@@ -97,7 +97,7 @@ int serial3_baud = 9600;
 void setup() {
   Serial3.begin(serial3_baud);   //the number in here is the baud rate, it is the communication speed, this must be matched in the python
   Serial.begin(serial_baud);     //it does not seem to work at lower baud rates
-  pinMode(serialControlPin, OUTPUT); //RS485 Control pin
+  //pinMode(serialControlPin, OUTPUT); //RS485 Control pin
   pinMode(13, OUTPUT); // LED
   pinMode(4, OUTPUT); // motor PWM or relays?
   pinMode(5, OUTPUT);// motor PWM?
@@ -122,7 +122,7 @@ void setup() {
   sensors.begin(); // IC Default 9 bit. If you have troubles consider upping it 12.
   //Ups the delay giving the IC more time to process the temperature measurement
 
-  digitalWrite(serialControlPin, LOW);
+  //digitalWrite(serialControlPin, LOW);
 
   motorSetup();
 
@@ -343,7 +343,7 @@ void loop()
   {
     waitForStart();
     Input i = readBuffer();
-    digitalWrite(serialControlPin, HIGH);
+    //digitalWrite(serialControlPin, HIGH);
     if (debug == true)
     {
       Serial.println("debugging input");
@@ -353,7 +353,7 @@ void loop()
     Serial3.flush();
     sensors.requestTemperatures();
     delay(50);         //this delay allows for hardware serial to work with rs485
-    digitalWrite(serialControlPin, LOW);
+    //digitalWrite(serialControlPin, LOW);
 
     processInput(i);//gives the inputs to the motors
   }
