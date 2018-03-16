@@ -1,6 +1,3 @@
-int _c1 = 22;
-int _c2 = 24;
-int _c3 = 26;
 #include "arduino.h"
 #include <Wire.h>
 #include <Servo.h>
@@ -8,6 +5,9 @@ int _c3 = 26;
 #define NUM_CAMERAS 2
 
 //camera pins
+int _c1 = 45;
+int _c2 = 46;
+int _c3 = 47;
 int currentCamera = 0;
 bool debounce = 0;
 
