@@ -71,7 +71,7 @@ bool reportVoltage = false;
 bool reportTemperature = false;
 bool reportAccel = true; // to be used in 2018
 bool reportDepth = false;
-bool reportYPR = false; //to be used in 2018
+bool reportYPR = true; //to be used in 2018
 bool reportAmperage = false;
 
 bool debug = true;
