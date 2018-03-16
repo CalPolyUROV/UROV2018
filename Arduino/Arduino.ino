@@ -87,7 +87,7 @@ uint16_t* p_amperages;
 imu::Vector<3> euler;
 
 
-int serial_baud = 9600;
+int serial_baud = 19200;
 int serial3_baud = 9600;
 
 
