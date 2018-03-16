@@ -5,12 +5,22 @@
 #define NUM_CAMERAS 2
 
 //camera pins
+int _ce = 44;
 int _c1 = 45;
 int _c2 = 46;
 int _c3 = 47;
 int currentCamera = 0;
 bool debounce = 0;
 
+void enableCameras(bool enable)
+{
+  if (enable) {
+    digitalWrite(_ce, HIGH);
+  }
+  else {
+    digitalWrite(_ce, LOW);
+  }
+}
 void setCameras(unsigned char buttons)
 {
 
