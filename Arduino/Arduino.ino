@@ -253,38 +253,33 @@ void writeToCommand(Input i) {
   if (reportYPR) {
 
     euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-
+    int yaw = (int)(euler.x());
+    int pitch = (int)(euler.y());
+    int roll = (int)(euler.z());
     //coms.sendSlaveCmd(GET_YAW);
     Serial3.println("YAW");
-    Serial3.println((int)(euler.x()));
+    Serial3.println(yaw);
     //Serial3.println(coms.getSlaveData());
 
     //CHANGE//coms.sendSlaveCmd(GET_PCH);
     Serial3.println("PCH");
-    Serial3.println((int)(euler.y()));
+    Serial3.println(pitch);
 
     //CHANGE//coms.sendSlaveCmd(GET_ROL);
     Serial3.println("ROL");
-    Serial3.println((int)(euler.z()));
+    Serial3.println(roll);
 
 
     if (debug) {
+      Serial.print("YAW: ");
+      Serial.println(yaw);
+    
+      Serial.print("PCH: ");
+      Serial.println(pitch);
+    
+      Serial.print("ROL: ");
+      Serial.println(roll);
 
-      //CHANGE//coms.sendSlaveCmd(GET_YAW);
-      //Serial.println("YAW");
-      //yaw = coms.getSlaveData();
-      /*
-        Serial.println(yaw);
-        //Serial3.println(coms.getSlaveData());
-
-        coms.sendSlaveCmd(GET_PCH);
-        Serial.println("PCH");
-        Serial.println(coms.getSlaveData());
-
-        coms.sendSlaveCmd(GET_ROL);
-        Serial.println("ROL");
-        Serial.println(coms.getSlaveData());
-      */
     }
   }
   if (reportAccel) {
@@ -313,7 +308,8 @@ void writeToCommand(Input i) {
     Serial3.println("DPT"); //tell it the next line is Depth
     //CHANGE//coms.sendSlaveCmd(GET_DEPT);
     //CHANGE//Serial3.print(coms.getSlaveData());
-    Serial3.println(" feet");
+    //Serial3.println(" feet");
+    Serial3.println("
   }
 }
 
@@ -337,7 +333,7 @@ void debugInput(Input i) {
 
 void loop()
 {
-  Serial.print("Starting loop code: serial3 avaiable:");
+  Serial.print("\n\n\n\n\n\n\nStarting loop code: serial3 avaiable:");
   Serial.println(Serial3.available());
   if (Serial3.available() > 0)
   {
