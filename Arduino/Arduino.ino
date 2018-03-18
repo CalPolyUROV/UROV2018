@@ -309,7 +309,7 @@ void writeToCommand(Input i) {
     //CHANGE//coms.sendSlaveCmd(GET_DEPT);
     //CHANGE//Serial3.print(coms.getSlaveData());
     //Serial3.println(" feet");
-    Serial3.println("
+    //Serial3.println("
   }
 }
 
