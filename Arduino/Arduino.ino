@@ -99,10 +99,12 @@ void setup() {
   Serial.begin(serial_baud);     //it does not seem to work at lower baud rates
   //pinMode(serialControlPin, OUTPUT); //RS485 Control pin
   pinMode(13, OUTPUT); // LED
+  pinMode(2, OUTPUT); // motors
+  pinMode(3, OUTPUT); // motors
   pinMode(4, OUTPUT); // motor PWM or relays?
-  pinMode(5, OUTPUT);// motor PWM?
-  pinMode(6, OUTPUT);// motor PWM?
-  pinMode(7, OUTPUT);// motor PWM or relays?
+  pinMode(5, OUTPUT); // motor PWM?
+  pinMode(6, OUTPUT); // motor PWM?
+  pinMode(7, OUTPUT); // motor PWM or relays?
   // pinMode(22, OUTPUT);
   // pinMode(24, OUTPUT);
 

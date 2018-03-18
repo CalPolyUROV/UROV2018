@@ -20,12 +20,12 @@
 #include <Servo.h>
 
 //motor pins
-int _m1 = 13;
-int _m2 = 12;
-int _m3 = 11;
-int _m4 = 10;
-int _m5 = 9;
-int _m6 = 8;
+int _m1 = 7; //13;
+int _m2 = 6; //12;
+int _m3 = 5; //11;
+int _m4 = 4; //10;
+int _m5 = 3; //9;
+int _m6 = 2; //8;
 //limiting variable
 int currentMotor1speed = 0;
 int currentMotor2speed = 0;
