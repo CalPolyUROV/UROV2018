@@ -1,6 +1,7 @@
 #include "arduino.h"
 //
 #include <wire.h>
+#include <Servo.h>
 #define MOTORACCELERATIONMAX 80
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
@@ -17,7 +18,6 @@
  */
 
 /////////////////////////////////////////////////////////////////globals
-#include <Servo.h>
 
 //motor pins
 int _m1 = 7; //13;
