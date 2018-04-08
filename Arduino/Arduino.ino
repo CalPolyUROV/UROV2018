@@ -24,8 +24,42 @@
 
 #include "DallasTemperature.h"
 
+//---------------FEATURES:--------------------
+//-- set true or false to enable or disable --
+//--------------------------------------------
+#define REPORT_PRESSURE false
+#define REPORT_VOLTAGE false
+#define REPORT_TEMPERATURE false
+#define REPORT_ACCEL true
+#define REPORT_DEPTH false
+#define REPORT_YPR true
+#define REPORT_AMPERAGE
+
+#define DEBUG_MODE true
+//-- end features-----------------------------
+
+#define SERIAL_BAUD 19200;
+#define SERIAL3_BAUD = 9600;
+
+//--Pinouts:---------------------------------
+
+// Motors
+#define MOTOR_SIGNAL_PIN_0 2
+#define MOTOR_SIGNAL_PIN_1 3
+#define MOTOR_SIGNAL_PIN_2 4
+#define MOTOR_SIGNAL_PIN_3 5
+#define MOTOR_SIGNAL_PIN_4 6
+#define MOTOR_SIGNAL_PIN_5 7
+
+// Cameras
+#define CAMERA_ENABLE_PIN 44
+#define CAMERA_SEL_PIN_C 45
+#define CAMERA_SEL_PIN_B 46
+#define CAMERA_SEL_PIN_A 47
+
 // Data wire is plugged into pin 26 on the Arduino
 #define ONE_WIRE_BUS 3
+//--End Pinout---------------------------------
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
 OneWire oneWire(ONE_WIRE_BUS);
@@ -41,14 +75,6 @@ Adafruit_BNO055 bno = Adafruit_BNO055();
 
 // I2C pins 20 and 21 for BNO055
 // SDA, SCL to
-
-
-///// Pins used by Quad Motor Shields //////
-//
-// 7, 6, 11, 12, 22, 24, 31, 33, 29, 25, 27, 23, A1,
-//42, 44, 40, 24, 26, 22
-//
-//////////////////////////////////
 
 ///// Pins used by Pressure Sensor //////
 // (OLD)
@@ -66,15 +92,6 @@ Adafruit_BNO055 bno = Adafruit_BNO055();
 
 //CHANGE//ComsMasterArd coms;
 //QuadMotorShields md;//Not being used anymore
-bool reportPressure = false;
-bool reportVoltage = false;
-bool reportTemperature = false;
-bool reportAccel = true; // to be used in 2018
-bool reportDepth = false;
-bool reportYPR = true; //to be used in 2018
-bool reportAmperage = false;
-
-bool debug = true;
 
 int yaw;
 int pch;
@@ -87,11 +104,6 @@ uint16_t* p_amperages;
 imu::Vector<3> euler;
 
 
-int serial_baud = 19200;
-int serial3_baud = 9600;
-
-
-
 //SoftwareSerial Serial3(14, 15);
 
 void setup() {
@@ -99,12 +111,12 @@ void setup() {
   Serial.begin(serial_baud);     //it does not seem to work at lower baud rates
   //pinMode(serialControlPin, OUTPUT); //RS485 Control pin
   pinMode(13, OUTPUT); // LED
-  pinMode(2, OUTPUT); // motors
-  pinMode(3, OUTPUT); // motors
-  pinMode(4, OUTPUT); // motor PWM or relays?
-  pinMode(5, OUTPUT); // motor PWM?
-  pinMode(6, OUTPUT); // motor PWM?
-  pinMode(7, OUTPUT); // motor PWM or relays?
+  pinMode(MOTOR_SIGNAL_PIN_0, OUTPUT); // motors
+  pinMode(MOTOR_SIGNAL_PIN_1, OUTPUT); // motors
+  pinMode(MOTOR_SIGNAL_PIN_2, OUTPUT); // motor PWM
+  pinMode(MOTOR_SIGNAL_PIN_3, OUTPUT); // motor PWM
+  pinMode(MOTOR_SIGNAL_PIN_4, OUTPUT); // motor PWM
+  pinMode(MOTOR_SIGNAL_PIN_5, OUTPUT); // motor PWM
   // pinMode(22, OUTPUT);
   // pinMode(24, OUTPUT);
 
@@ -272,7 +284,7 @@ void writeToCommand(Input i) {
     Serial3.println(roll);
 
 
-    if (debug) {
+    if (DEBUG_MODE) {
       Serial.print("YAW: ");
       Serial.println(yaw);
     
@@ -342,7 +354,7 @@ void loop()
     waitForStart();
     Input i = readBuffer();
     //digitalWrite(serialControlPin, HIGH);
-    if (debug == true)
+    if (DEBUG_MODE == true)
     {
       Serial.println("debugging input");
       debugInput(i);
