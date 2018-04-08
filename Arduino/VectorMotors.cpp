@@ -1,5 +1,4 @@
 #include "arduino.h"
-//
 #include <wire.h>
 #include <Servo.h>
 #define MOTORACCELERATIONMAX 80
@@ -29,7 +28,8 @@
  * test the direction without the propellers!
  */
 
-/////////////////////////////////////////////////////////////////globals
+////////////globals
+
 
 //limiting variable
 int currentMotor1speed = 0;
