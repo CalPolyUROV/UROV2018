@@ -38,8 +38,8 @@
 #define DEBUG_MODE true
 //-- end features-----------------------------
 
-#define SERIAL_BAUD 19200;
-#define SERIAL3_BAUD = 9600;
+#define SERIAL_BAUD 19200
+#define SERIAL3_BAUD 9600
 
 //--Pinouts:---------------------------------
 
@@ -107,8 +107,8 @@ imu::Vector<3> euler;
 //SoftwareSerial Serial3(14, 15);
 
 void setup() {
-  Serial3.begin(serial3_baud);   //the number in here is the baud rate, it is the communication speed, this must be matched in the python
-  Serial.begin(serial_baud);     //it does not seem to work at lower baud rates
+  Serial3.begin(SERIAL3_BAUD);   //the number in here is the baud rate, it is the communication speed, this must be matched in the python
+  Serial.begin(SERIAL_BAUD);     //it does not seem to work at lower baud rates
   //pinMode(serialControlPin, OUTPUT); //RS485 Control pin
   pinMode(13, OUTPUT); // LED
   pinMode(MOTOR_SIGNAL_PIN_0, OUTPUT); // motors
@@ -140,7 +140,7 @@ void setup() {
 
   motorSetup();
 
-  if (reportYPR) //if using accel and orrientation,
+  if (REPORT_YPR) //if using accel and orrientation,
   {
     if (!bno.begin())
     {
@@ -227,12 +227,12 @@ void processInput(Input i) {
 void writeToCommand(Input i) {
   Serial3.print("STR");
   int lines = 0;
-  if (reportPressure) lines += 2;
-  if (reportVoltage) lines += 2;
-  if (reportTemperature) lines += 2;
-  if (reportDepth) lines += 2;
-  if (reportAccel) lines += 4;
-  if (reportYPR) lines += 6;
+  if (REPORT_PRESSURE) lines += 2;
+  if (REPORT_VOLTAGE) lines += 2;
+  if (REPORT_TEMPERATURE) lines += 2;
+  if (REPORT_DEPTH) lines += 2;
+  if (REPORT_ACCEL) lines += 4;
+  if (REPORT_YPR) lines += 6;
   String numberOfLines = String(lines);
   int counter = 0;
   while ((counter + numberOfLines.length()) != 3) // pad zeros in front
@@ -242,18 +242,18 @@ void writeToCommand(Input i) {
   }
   Serial3.print(numberOfLines); //print the number of lines of input the python program can read in three digits
 
-  if (reportPressure) {
+  if (REPORT_PRESSURE) {
     Serial3.println("PSR"); //tell it the next line is Pressure
     //coms.sendSlaveCmd(GET_PRES);
     //Serial3.print(coms.getSlaveData());
     Serial3.println(" mbars");
   }
-  if (reportVoltage) {
+  if (REPORT_VOLTAGE) {
     Serial3.println("VLT"); //tell it the next line is Power info
     Serial3.println( (((float)(analogRead(A1)) * (5.0 / 1023.0)) - 2.52)   / .066 );
     //Serial3.println(" amps");
   }
-  if (reportTemperature) {
+  if (REPORT_TEMPERATURE) {
 
     Serial3.println("TMP"); //tell it the next line is Temperature
     //coms.sendSlaveCmd(GET_TEMP);
@@ -264,7 +264,7 @@ void writeToCommand(Input i) {
     //Serial3.print(coms.getSlaveData());
     //Serial3.println(" degrees C");
   }
-  if (reportYPR) {
+  if (REPORT_YPR) {
 
     euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
     int yaw = (int)(euler.x());
@@ -296,7 +296,7 @@ void writeToCommand(Input i) {
 
     }
   }
-  if (reportAccel) {
+  if (REPORT_ACCEL) {
     Serial3.println("ACL"); //tell it the next line is Accelerometer
     Serial3.print("Accel: X: ");
     Serial3.print(getAccelX());
@@ -318,7 +318,7 @@ void writeToCommand(Input i) {
     Serial3.print(getMagZ());
     Serial3.println();
   }
-  if (reportDepth) {
+  if (REPORT_DEPTH) {
     Serial3.println("DPT"); //tell it the next line is Depth
     //CHANGE//coms.sendSlaveCmd(GET_DEPT);
     //CHANGE//Serial3.print(coms.getSlaveData());
@@ -354,7 +354,7 @@ void loop()
     waitForStart();
     Input i = readBuffer();
     //digitalWrite(serialControlPin, HIGH);
-    if (DEBUG_MODE == true)
+    if (DEBUG_MODE)
     {
       Serial.println("debugging input");
       debugInput(i);
