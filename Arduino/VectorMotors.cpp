@@ -17,6 +17,9 @@
 
 
 ///////////connecting the ESC to the arduino (switch the pin to the one in use)
+
+#define ESC_CENTER_MS 1500
+
 /*
  * connect three 24 gauge wires to the arduino (can power the arduino)
  * the yellow wire is the signal wire (connect to any pin on the arduino)
@@ -75,18 +78,18 @@ int brownOutPrevent(int currentSpeed, int targetSpeed);
 
 void motorSetup() 
 {
-  motor1.writeMicroseconds(1500); // set the ESC to 0 Amps (1500us +-25us is the center)
-  motor2.writeMicroseconds(1500);
-  motor3.writeMicroseconds(1500);
-  motor4.writeMicroseconds(1500);
-  motor5.writeMicroseconds(1500);
-  motor6.writeMicroseconds(1500);
   motor1.attach(MOTOR_SIGNAL_PIN_0); // make the pin act like a servo
   motor2.attach(MOTOR_SIGNAL_PIN_1);
   motor3.attach(MOTOR_SIGNAL_PIN_2);
   motor4.attach(MOTOR_SIGNAL_PIN_3);
   motor5.attach(MOTOR_SIGNAL_PIN_4);
   motor6.attach(MOTOR_SIGNAL_PIN_5);
+  motor1.writeMicroseconds(ESC_CENTER_MS); // set the ESC to 0 Amps (1500us +-25us is the center)
+  motor2.writeMicroseconds(ESC_CENTER_MS);
+  motor3.writeMicroseconds(ESC_CENTER_MS);
+  motor4.writeMicroseconds(ESC_CENTER_MS);
+  motor5.writeMicroseconds(ESC_CENTER_MS);
+  motor6.writeMicroseconds(ESC_CENTER_MS);
   delay(100); // ensure that the signal was recieved
 }
 
