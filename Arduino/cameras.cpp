@@ -5,7 +5,7 @@
 #define NUM_CAMERAS 2
 
 //camera pins
-int _ce = 44;
+int camera_enable = 44;
 int _c1 = 45;
 int _c2 = 46;
 int _c3 = 47;
@@ -14,11 +14,12 @@ bool debounce = 0;
 
 void enableCameras(bool enable)
 {
+  //camera multiplexor enable is active low
   if (enable) {
-    digitalWrite(_ce, HIGH);
+    digitalWrite(camera_enable, LOW);
   }
   else {
-    digitalWrite(_ce, LOW);
+    digitalWrite(camera_enable, HIGH);
   }
 }
 void setCameras(unsigned char buttons)
