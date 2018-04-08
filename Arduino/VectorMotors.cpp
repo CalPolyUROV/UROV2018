@@ -7,6 +7,15 @@
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 //20 motor speed unit things per interval (maybe change to dv/dt later)
 
+// Motors
+#define MOTOR_SIGNAL_PIN_0 2
+#define MOTOR_SIGNAL_PIN_1 3
+#define MOTOR_SIGNAL_PIN_2 4
+#define MOTOR_SIGNAL_PIN_3 5
+#define MOTOR_SIGNAL_PIN_4 6
+#define MOTOR_SIGNAL_PIN_5 7
+
+
 ///////////connecting the ESC to the arduino (switch the pin to the one in use)
 /*
  * connect three 24 gauge wires to the arduino (can power the arduino)
@@ -19,13 +28,6 @@
 
 /////////////////////////////////////////////////////////////////globals
 
-//motor pins
-int _m1 = 7; //13;
-int _m2 = 6; //12;
-int _m3 = 5; //11;
-int _m4 = 4; //10;
-int _m5 = 3; //9;
-int _m6 = 2; //8;
 //limiting variable
 int currentMotor1speed = 0;
 int currentMotor2speed = 0;
@@ -73,18 +75,18 @@ int brownOutPrevent(int currentSpeed, int targetSpeed);
 
 void motorSetup() 
 {
-  motor1.attach(_m1); // make the pin act like a servo
-  motor2.attach(_m2);
-  motor3.attach(_m3);
-  motor4.attach(_m4);
-  motor5.attach(_m5);
-  motor6.attach(_m6);
   motor1.writeMicroseconds(1500); // set the ESC to 0 Amps (1500us +-25us is the center)
   motor2.writeMicroseconds(1500);
   motor3.writeMicroseconds(1500);
   motor4.writeMicroseconds(1500);
   motor5.writeMicroseconds(1500);
   motor6.writeMicroseconds(1500);
+  motor1.attach(MOTOR_SIGNAL_PIN_0); // make the pin act like a servo
+  motor2.attach(MOTOR_SIGNAL_PIN_1);
+  motor3.attach(MOTOR_SIGNAL_PIN_2);
+  motor4.attach(MOTOR_SIGNAL_PIN_3);
+  motor5.attach(MOTOR_SIGNAL_PIN_4);
+  motor6.attach(MOTOR_SIGNAL_PIN_5);
   delay(100); // ensure that the signal was recieved
 }
 
