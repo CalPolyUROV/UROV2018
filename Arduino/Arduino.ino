@@ -1,18 +1,23 @@
 
 
+#include <SoftwareSerial.h>
+#include <SPI.h>
 #include <Servo.h>
+#include <Wire.h>
+
 #include "Math.h"
 #include "Accelerometer.h"
 #include "dataStruc.h"
+
 //#include "QuadMotorShields.h"
+
 #include "gyroAccelerometer.h"
-#include <SoftwareSerial.h>
-#include <SPI.h>
 #include "pressure.h"
-#include <Wire.h>
+
 //#include "ComsMasterArd.h"
 #include "VectorMotors.h"
 #include "cameras.h"
+
 //#include "currentSensing.h"
 
 #include "Adafruit_Sensor.h"
@@ -75,20 +80,6 @@ Adafruit_BNO055 bno = Adafruit_BNO055();
 
 // I2C pins 20 and 21 for BNO055
 // SDA, SCL to
-
-///// Pins used by Pressure Sensor //////
-// (OLD)
-//45, 50, 51, 52
-//
-//////////////////////////////////
-
-//End of pin listings
-
-///// Timers used by Quad Motor Shields on MEGA 2560//////
-//
-// Timer0, Timer1, Timer4
-//
-//////////////////////////////////
 
 //CHANGE//ComsMasterArd coms;
 //QuadMotorShields md;//Not being used anymore
