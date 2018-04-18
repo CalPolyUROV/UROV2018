@@ -108,13 +108,6 @@ void setup() {
   pinMode(MOTOR_SIGNAL_PIN_3, OUTPUT); // motor PWM
   pinMode(MOTOR_SIGNAL_PIN_4, OUTPUT); // motor PWM
   pinMode(MOTOR_SIGNAL_PIN_5, OUTPUT); // motor PWM
-  // pinMode(22, OUTPUT);
-  // pinMode(24, OUTPUT);
-
-  //digitalWrite(4, LOW); //Relay 4
-  //digitalWrite(5, LOW);
-  //digitalWrite(6, LOW);
-  //digitalWrite(7, LOW); //Relay 1
 
   //delay(5000);
   if (!bno.begin())
@@ -338,7 +331,7 @@ void debugInput(Input i) {
 
 void loop()
 {
-  Serial.print("\n\n\n\n\n\n\nStarting loop code: serial3 avaiable:");
+  //Serial.print("\n\n\n\n\n\n\nStarting loop code: serial3 avaiable:");
   Serial.println(Serial3.available());
   if (Serial3.available() > 0)
   {
