@@ -1,14 +1,23 @@
 #include "arduino.h"
 #include <Wire.h>
 #include <Servo.h>
+
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
-#define NUM_CAMERAS 2
+
+#define NUM_CAMERAS 1
+
+// Cameras
+#define CAMERA_ENABLE_PIN 44
+#define CAMERA_SEL_PIN_C 45
+#define CAMERA_SEL_PIN_B 46
+#define CAMERA_SEL_PIN_A 47
 
 //camera pins
-int camera_enable = 44;
-int _c1 = 45;
-int _c2 = 46;
-int _c3 = 47;
+int camera_enable = CAMERA_ENABLE_PIN;
+int _c1 = CAMERA_SEL_PIN_C;
+int _c2 = CAMERA_SEL_PIN_B;
+int _c3 = CAMERA_SEL_PIN_A;
+
 int currentCamera = 0;
 bool debounce = 0;
 

@@ -56,11 +56,11 @@
 #define MOTOR_SIGNAL_PIN_4 6
 #define MOTOR_SIGNAL_PIN_5 7
 
-// Cameras
-#define CAMERA_ENABLE_PIN 44
-#define CAMERA_SEL_PIN_C 45
-#define CAMERA_SEL_PIN_B 46
-#define CAMERA_SEL_PIN_A 47
+// Cameras pins define in cameras.cpp
+// CAMERA_ENABLE_PIN 44
+// CAMERA_SEL_PIN_C 45
+// CAMERA_SEL_PIN_B 46
+// CAMERA_SEL_PIN_A 47
 
 // Data wire is plugged into pin 26 on the Arduino
 #define ONE_WIRE_BUS 3
