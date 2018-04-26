@@ -14,9 +14,6 @@
 
 //camera pins
 int camera_enable = CAMERA_ENABLE_PIN;
-int _c1 = CAMERA_SEL_PIN_C;
-int _c2 = CAMERA_SEL_PIN_B;
-int _c3 = CAMERA_SEL_PIN_A;
 
 int currentCamera = 0;
 bool debounce = 0;
@@ -41,9 +38,9 @@ void setCameras(unsigned char buttons)
     if (currentCamera == NUM_CAMERAS) {
       currentCamera = 0;
     }
-    digitalWrite(_c1, !(CHECK_BIT(currentCamera, 0)));
-    digitalWrite(_c2, CHECK_BIT(currentCamera, 1));
-    digitalWrite(_c3, CHECK_BIT(currentCamera, 2));
+    digitalWrite(CAMERA_SEL_PIN_A, !(CHECK_BIT(currentCamera, 0)));
+    digitalWrite(CAMERA_SEL_PIN_B, CHECK_BIT(currentCamera, 1));
+    digitalWrite(CAMERA_SEL_PIN_C, CHECK_BIT(currentCamera, 2));
   }
   else {
     debounce = 1;
