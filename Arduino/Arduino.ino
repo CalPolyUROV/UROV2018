@@ -7,7 +7,7 @@
 
 #include "Math.h"
 #include "Accelerometer.h"
-#include "dataStruc.h"
+#include "dataStruct.h"
 
 //#include "QuadMotorShields.h"
 
