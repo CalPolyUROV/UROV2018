@@ -47,12 +47,44 @@
 //--Pinouts:---------------------------------
 
 // Motors
+/* OLD:
 #define MOTOR_SIGNAL_PIN_0 2
 #define MOTOR_SIGNAL_PIN_1 3
-#define MOTOR_SIGNAL_PIN_2 4
-#define MOTOR_SIGNAL_PIN_3 5
+#define MOTOR_SIGNAL_PIN_2 6
+#define MOTOR_SIGNAL_PIN_3 7
 #define MOTOR_SIGNAL_PIN_4 6
 #define MOTOR_SIGNAL_PIN_5 7
+*/
+/* NEW:
+       +---------+
+       | CAMERA  |
+  +-------------------+
+  |A||   FORWARD   ||B|
+  +--|             |--+
+  +--|             |--+
+  |C||  VERTICAL   ||D|
+  +--|             |--+
+  +--|             |--+
+  |E||  BACKWARD   ||F|
+  +-------------------+
+     | TETHER CONN |
+     +-------------+
+
+     Current guesses:
+     thruster=motor=pin
+     a=1=2
+     b=2=3
+     c=5=6
+     d=6=7
+     e=3=4
+     f=4=5
+*/
+#define MOTOR_A_PIN 2
+#define MOTOR_B_PIN 3
+#define MOTOR_C_PIN 6
+#define MOTOR_D_PIN 7
+#define MOTOR_E_PIN 4
+#define MOTOR_F_PIN 5
 
 // Cameras pins define in cameras.cpp
 // CAMERA_ENABLE_PIN 44
@@ -96,14 +128,17 @@ imu::Vector<3> euler;
 void setup() {
   Serial3.begin(SERIAL3_BAUD);   //the number in here is the baud rate, it is the communication speed, this must be matched in the python
   Serial.begin(SERIAL_BAUD);     //it does not seem to work at lower baud rates
-  pinMode(MOTOR_SIGNAL_PIN_0, OUTPUT); // motors
-  pinMode(MOTOR_SIGNAL_PIN_1, OUTPUT); // motors
-  pinMode(MOTOR_SIGNAL_PIN_2, OUTPUT); // motor PWM
-  pinMode(MOTOR_SIGNAL_PIN_3, OUTPUT); // motor PWM
-  pinMode(MOTOR_SIGNAL_PIN_4, OUTPUT); // motor PWM
-  pinMode(MOTOR_SIGNAL_PIN_5, OUTPUT); // motor PWM
 
   //pinMode(13, OUTPUT); // LED
+  
+  pinMode(MOTOR_A_PIN, OUTPUT); // motor PWM
+  pinMode(MOTOR_B_PIN, OUTPUT); // motor PWM
+  pinMode(MOTOR_C_PIN, OUTPUT); // motor PWM
+  pinMode(MOTOR_D_PIN, OUTPUT); // motor PWM
+  pinMode(MOTOR_E_PIN, OUTPUT); // motor PWM
+  pinMode(MOTOR_F_PIN, OUTPUT); // motor PWM
+  
+  motorSetup();
   
   //delay(5000);
   if (!bno.begin())
@@ -115,8 +150,6 @@ void setup() {
 
   sensors.begin(); // IC Default 9 bit. If you have troubles consider upping it 12.
   //Ups the delay giving the IC more time to process the temperature measurement
-
-  motorSetup();
 
   if (REPORT_YPR) //if using accel and orrientation,
   {
