@@ -40,7 +40,7 @@
 #define REPORT_YPR true
 #define REPORT_AMPERAGE
 
-#define DEBUG_MODE true
+#define DEBUG false
 //-- end features-----------------------------
 
 #define SERIAL_BAUD 19200
@@ -268,7 +268,7 @@ void writeToCommand(Input i) {
     Serial3.println(roll);
 
 
-    if (DEBUG_MODE) {
+    if (DEBUG) {
       Serial.print("YAW: ");
       Serial.println(yaw);
     
@@ -338,7 +338,7 @@ void loop()
     waitForStart();
     Input i = readBuffer();
     //digitalWrite(serialControlPin, HIGH);
-    if (DEBUG_MODE)
+    if (DEBUG)
     {
       Serial.println("debugging input");
       debugInput(i);
