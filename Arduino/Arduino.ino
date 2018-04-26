@@ -1,5 +1,3 @@
-
-
 #include <SoftwareSerial.h>
 #include <SPI.h>
 #include <Servo.h>
@@ -38,7 +36,7 @@
 #define REPORT_ACCEL true
 #define REPORT_DEPTH false
 #define REPORT_YPR true
-#define REPORT_AMPERAGE
+#define REPORT_AMPERAGE false
 
 #define DEBUG false
 //-- end features-----------------------------
@@ -74,9 +72,7 @@ DallasTemperature sensors(&oneWire);
 
 Adafruit_BNO055 bno = Adafruit_BNO055();
 
-//all pins used must be listed here! either as a variable to change quickly later or as a comment if it is in another file
-
-//int serialControlPin = 29; //this is the pin to control whethgeter it is recieving or sending
+//all pins used must be listed here as a comment if it is in another file
 
 // I2C pins 20 and 21 for BNO055
 // SDA, SCL to
@@ -100,8 +96,6 @@ imu::Vector<3> euler;
 void setup() {
   Serial3.begin(SERIAL3_BAUD);   //the number in here is the baud rate, it is the communication speed, this must be matched in the python
   Serial.begin(SERIAL_BAUD);     //it does not seem to work at lower baud rates
-  //pinMode(serialControlPin, OUTPUT); //RS485 Control pin
-  pinMode(13, OUTPUT); // LED
   pinMode(MOTOR_SIGNAL_PIN_0, OUTPUT); // motors
   pinMode(MOTOR_SIGNAL_PIN_1, OUTPUT); // motors
   pinMode(MOTOR_SIGNAL_PIN_2, OUTPUT); // motor PWM
@@ -109,6 +103,8 @@ void setup() {
   pinMode(MOTOR_SIGNAL_PIN_4, OUTPUT); // motor PWM
   pinMode(MOTOR_SIGNAL_PIN_5, OUTPUT); // motor PWM
 
+  //pinMode(13, OUTPUT); // LED
+  
   //delay(5000);
   if (!bno.begin())
   {
@@ -119,8 +115,6 @@ void setup() {
 
   sensors.begin(); // IC Default 9 bit. If you have troubles consider upping it 12.
   //Ups the delay giving the IC more time to process the temperature measurement
-
-  //digitalWrite(serialControlPin, LOW);
 
   motorSetup();
 
@@ -188,21 +182,8 @@ Input readBuffer() {
   return input;
 }
 
-void processInput(Input i) {
-
-//  if ((CHECK_BIT(i.buttons1, 3))) {
-//    digitalWrite(22, HIGH);
-//  }
-//  else {
-//    digitalWrite(22, LOW);
-//  }
-//  if ((CHECK_BIT(i.buttons1, 4))) {
-//    digitalWrite(24, HIGH);
-//  }
-//  else {
-//    digitalWrite(24, LOW);
-//  }
-
+void processInput(Input i)
+{
   setCameras(i.buttons1);
   setMotors(i.primaryX, i.primaryY, i.triggers, i.secondaryX, i.buttons1);
 }
@@ -254,16 +235,13 @@ void writeToCommand(Input i) {
     int yaw = (int)(euler.x());
     int pitch = (int)(euler.y());
     int roll = (int)(euler.z());
-    //coms.sendSlaveCmd(GET_YAW);
+
     Serial3.println("YAW");
     Serial3.println(yaw);
-    //Serial3.println(coms.getSlaveData());
 
-    //CHANGE//coms.sendSlaveCmd(GET_PCH);
     Serial3.println("PCH");
     Serial3.println(pitch);
 
-    //CHANGE//coms.sendSlaveCmd(GET_ROL);
     Serial3.println("ROL");
     Serial3.println(roll);
 
@@ -303,7 +281,8 @@ void writeToCommand(Input i) {
     Serial3.println();
   }
   if (REPORT_DEPTH) {
-    Serial3.println("DPT"); //tell it the next line is Depth
+    // BROKEN
+    //Serial3.println("DPT"); //tell it the next line is Depth
     //CHANGE//coms.sendSlaveCmd(GET_DEPT);
     //CHANGE//Serial3.print(coms.getSlaveData());
     //Serial3.println(" feet");
@@ -313,7 +292,7 @@ void writeToCommand(Input i) {
 
 void debugInput(Input i) {
   //the following is for debugging, prints all input back out on the serial used for programming the arduino
-  Serial.print("buttons: ");
+  Serial.print("Buttons: ");
   Serial.print(i.buttons2);
   Serial.print(" ");
   Serial.print(i.buttons1);
@@ -331,13 +310,12 @@ void debugInput(Input i) {
 
 void loop()
 {
-  //Serial.print("\n\n\n\n\n\n\nStarting loop code: serial3 avaiable:");
+  Serial.print("Starting loop code: serial3 avaiable:");
   Serial.println(Serial3.available());
   if (Serial3.available() > 0)
   {
     waitForStart();
     Input i = readBuffer();
-    //digitalWrite(serialControlPin, HIGH);
     if (DEBUG)
     {
       Serial.println("debugging input");
@@ -345,9 +323,8 @@ void loop()
     }
     writeToCommand(i); //this is where the code to write back to topside goes.
     Serial3.flush();
-    sensors.requestTemperatures();
-    delay(50);         //this delay allows for hardware serial to work with rs485
-    //digitalWrite(serialControlPin, LOW);
+    //sensors.requestTemperatures();
+    delay(50);       
 
     processInput(i);//gives the inputs to the motors
   }
