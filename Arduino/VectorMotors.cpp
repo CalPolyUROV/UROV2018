@@ -1,95 +1,103 @@
-#include "arduino.h"
 #include <wire.h>
 #include <Servo.h>
-#define MOTORACCELERATIONMAX 80
+
+#include "Arduino.h"
+#include "VectorMotors.h"
+
+#define DEBUG true
+
+#define MOTOR_INPUT_MIN 15
+#define MOTOR_JERK_MAX 80
+/* crazy people use 80, og version used 20 */
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 //20 motor speed unit things per interval (maybe change to dv/dt later)
 
-// Motors
-#define MOTOR_SIGNAL_PIN_0 2
-#define MOTOR_SIGNAL_PIN_1 3
-#define MOTOR_SIGNAL_PIN_2 4
-#define MOTOR_SIGNAL_PIN_3 5
-#define MOTOR_SIGNAL_PIN_4 6
-#define MOTOR_SIGNAL_PIN_5 7
+/* NEW PINOUT:
+       +---------+
+       | CAMERA  |
+  +-------------------+
+  |A||   FORWARD   ||B|
+  +--|             |--+
+  +--|             |--+
+  |C||  VERTICAL   ||D|
+  +--|             |--+
+  +--|             |--+
+  |E||  BACKWARD   ||F|
+  +-------------------+
+     | TETHER CONN |
+     +-------------+
 
+*/
+#define MOTOR_A_PIN 8
+#define MOTOR_B_PIN 9
+#define MOTOR_C_PIN 12
+#define MOTOR_D_PIN 13
+#define MOTOR_E_PIN 10
+#define MOTOR_F_PIN 11
+
+#define MOTOR_A_DIR 1
+#define MOTOR_B_DIR 1
+#define MOTOR_C_DIR 1
+#define MOTOR_D_DIR 1
+#define MOTOR_E_DIR 1
+#define MOTOR_F_DIR 1
 
 ///////////connecting the ESC to the arduino (switch the pin to the one in use)
 
 #define ESC_CENTER_MS 1500
 
 /*
- * connect three 24 gauge wires to the arduino (can power the arduino)
- * the yellow wire is the signal wire (connect to any pin on the arduino)
- * the red and black wires are power and ground, they can supple the arduino, but are not nessesary
- * now for the three wires connected to the motor
- * any combination works, if the motor turns the wrong way, switch two wires
- * test the direction without the propellers!
- */
+   connect three 24 gauge wires to the arduino (can power the arduino)
+   the yellow wire is the signal wire (connect to any pin on the arduino)
+   the red and black wires are power and ground, they can supple the arduino, but are not nessesary
+   now for the three wires connected to the motor
+   any combination works, if the motor turns the wrong way, switch two wires
+   test the direction without the propellers!
+*/
 
 ////////////globals
 
+int previous_speed_A = 0;
+int previous_speed_B = 0;
+int previous_speed_E = 0;
+int previous_speed_F = 0;
+int previous_speed_Z = 0;
 
-//limiting variable
-int currentMotor1speed = 0;
-int currentMotor2speed = 0;
-int currentMotor3speed = 0;
-int currentMotor4speed = 0;
-int currentZspeed = 0;
-//
-int motor1speedX; // initialize variables (used to calculate final motorspeed)
-  int motor2speedX;
-  int motor3speedX;
-  int motor4speedX;
-  
-  int motor1speedY;
-  int motor2speedY;
-  int motor3speedY;
-  int motor4speedY;
-  
-  int motor1speedR;
-  int motor2speedR;
-  int motor3speedR;
-  int motor4speedR;
+// final motorspeeds
+int motor_speed_A;
+int motor_speed_B;
+int motor_speed_E;
+int motor_speed_F;
+int motor_speed_Z;
 
-  int motor1speed; // (final motorspeeds)
-  int motor2speed;
-  int motor3speed;
-  int motor4speed;
+Servo motorA;
+Servo motorB;
+Servo motorE;
+Servo motorF;
+Servo motorC;
+Servo motorD;
 
+//attach ESCs to pins and set current to 0 Amps
 
-  int a, b;
-  int A,B;
-  //int motor1transspeed, motor2transspeed, motor3transspeed, motor4transspeed;
-
-  
-
-Servo motor1;
-Servo motor2;
-Servo motor3;
-Servo motor4;
-Servo motor5;
-Servo motor6;//the "servo" the pin will be connected to
-
-int brownOutPrevent(int currentSpeed, int targetSpeed);
-
-//////////////////////////////////////////////////////////////////////////attach ESCs to pins and set current to 0 Amps
-
-void motorSetup() 
+void motorSetup()
 {
-  motor1.attach(MOTOR_SIGNAL_PIN_0); // make the pin act like a servo
-  motor2.attach(MOTOR_SIGNAL_PIN_1);
-  motor3.attach(MOTOR_SIGNAL_PIN_2);
-  motor4.attach(MOTOR_SIGNAL_PIN_3);
-  motor5.attach(MOTOR_SIGNAL_PIN_4);
-  motor6.attach(MOTOR_SIGNAL_PIN_5);
-  motor1.writeMicroseconds(ESC_CENTER_MS); // set the ESC to 0 Amps (1500us +-25us is the center)
-  motor2.writeMicroseconds(ESC_CENTER_MS);
-  motor3.writeMicroseconds(ESC_CENTER_MS);
-  motor4.writeMicroseconds(ESC_CENTER_MS);
-  motor5.writeMicroseconds(ESC_CENTER_MS);
-  motor6.writeMicroseconds(ESC_CENTER_MS);
+  // make the pin act like a servo
+  motorA.attach(MOTOR_A_PIN);
+  motorB.attach(MOTOR_B_PIN);
+  motorC.attach(MOTOR_C_PIN);
+  motorD.attach(MOTOR_D_PIN);
+  motorE.attach(MOTOR_E_PIN);
+  motorF.attach(MOTOR_F_PIN);
+
+  // set the ESC to 0 Amps (1500us +-25us is the center)
+  motorA.writeMicroseconds(ESC_CENTER_MS);
+  motorB.writeMicroseconds(ESC_CENTER_MS);
+  motorC.writeMicroseconds(ESC_CENTER_MS);
+  motorD.writeMicroseconds(ESC_CENTER_MS);
+  motorE.writeMicroseconds(ESC_CENTER_MS);
+  motorF.writeMicroseconds(ESC_CENTER_MS);
+
   delay(100); // ensure that the signal was recieved
 }
 
@@ -99,135 +107,105 @@ void motorSetup()
 // servo.writeMicroseconds(number from 1100 to 1900)
 // less than 1500 should be backward (limit 1100)
 // more than 1500 should be forward  (limit 1900)
-void motor_1(int mspeed) 
+
+void motor_A(int mspeed)
 {
-  int mspeed1 = map(mspeed,-400,400,1100,1900);
-  motor1.writeMicroseconds(mspeed1);
+  motorA.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
 }
 
-void motor_2(int mspeed)
+void motor_B(int mspeed)
 {
-  int mspeed2 = map(mspeed,-400,400,1100,1900);
-  motor2.writeMicroseconds(mspeed2);
+  motorB.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
 }
 
-void motor_3(int mspeed)
+void motor_C(int mspeed)
 {
-  int mspeed3 = map(mspeed,400,-400,1100,1900);
-  motor3.writeMicroseconds(mspeed3);
+  motorC.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
 }
 
-void motor_4(int mspeed)
+void motor_D(int mspeed)
 {
-  int mspeed4 = map(mspeed,-400,400,1100,1900);
-  motor4.writeMicroseconds(mspeed4);
+  motorD.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
 }
 
-void motor_5(int mspeed)
+void motor_E(int mspeed)
 {
-  int mspeed5 = map(mspeed,400,-400,1100,1900);
-  //mspeed1 is reversed here
-  motor5.writeMicroseconds(mspeed5);
+  motorE.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
 }
 
-void motor_6(int mspeed)
+void motor_F(int mspeed)
 {
-  int mspeed6 = map(mspeed,-400,400,1100,1900);
-  motor6.writeMicroseconds(mspeed6);
+  motorF.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
 }
 
 
-///////////////////////////////////////////// allow rotation and planar movement simultaniously (takes x y z and r, then sets motorspeeds)
-void setMotors(int X,int Y,int Z,int R,unsigned char buttons)
+// allow rotation and planar movement simultaniously (takes x y z and r, then sets motorspeeds)
+void setMotors(int X, int Y, int Z, int R, unsigned char buttons)
 {
-  /*
-  a = (( (-1*X*1000/707) + (Y*1000/707) ) /2);
-  b = (( (X*1000/707) + (Y*1000/707) ) /2);
+  motor_speed_A = constrain((((     MOTOR_A_DIR * Y)
+                              + (MOTOR_A_DIR * X)) / 2)
+                            + (R / 2), -400, 400);
 
-  motor1speed = b;
-  motor2speed = a;
-  motor3speed = -a;
-  motor4speed = -b;
+  motor_speed_B = constrain((((     MOTOR_B_DIR * Y)
+                              - (MOTOR_B_DIR * X)) / 2)
+                            - (R / 2), -400, 400);
 
-  if(motor1speed<0)motor1speed*= 1.3; 
-  if(motor2speed<0)motor2speed*= 1.3;
-  if(motor3speed<0)motor3speed*= 1.3;
-  if(motor4speed<0)motor4speed*= 1.3;
-*/
+  motor_speed_E = constrain((((-1 * MOTOR_E_DIR * Y)
+                              + (MOTOR_E_DIR * X)) / 2)
+                            - (R / 2), -400, 400);
 
-  motor1speedY = Y; // get directions forward backward
-  motor2speedY = Y;
-  motor3speedY = -1*Y;
-  motor4speedY = Y;
-  
-  motor1speedX = X; // get directions right left
-  motor2speedX = -1*X;
-  motor3speedX = X;
-  motor4speedX = X;
+  motor_speed_F = constrain((((-1 * MOTOR_F_DIR * Y)
+                              - (MOTOR_F_DIR * X)) / 2)
+                            + (R / 2), -400, 400);
 
-  //motor1speedR = -1*R; // get directions turning
-  //motor2speedR = -1*R;
-  //motor3speedR = R;
-  //motor4speedR = R;
+  previous_speed_A = brownOutPrevent(previous_speed_A, motor_speed_A);
+  previous_speed_B = brownOutPrevent(previous_speed_B, motor_speed_B);
+  previous_speed_E = brownOutPrevent(previous_speed_E, motor_speed_E);
+  previous_speed_F = brownOutPrevent(previous_speed_F, motor_speed_F);
+  previous_speed_Z = brownOutPrevent(previous_speed_Z, motor_speed_Z);
 
+  //limiting code end
+  motor_A(previous_speed_A);
+  motor_B(previous_speed_B);
+  motor_E(previous_speed_E);
+  motor_F(previous_speed_F);
 
-  motor1speed = (motor1speedX + motor1speedY) / 2; // add and divide to get motor speeds (no rotation included yet)
-  motor2speed = (motor2speedX + motor2speedY) / 2;
-  motor3speed = (motor3speedX + motor3speedY) / 2;
-  motor4speed = (motor4speedX + motor4speedY) / 2;
+  //if (CHECK_BIT(buttons, 1)){}
+  motor_C(previous_speed_Z);
+  motor_D(previous_speed_Z);
 
-  motor1speed = motor1speed + R/2;
-  motor2speed = motor2speed - R/2;
-  motor3speed = motor3speed - R/2;
-  motor4speed = motor4speed - R/2;
-
-  motor1speed = constrain(motor1speed,-400,400);
-  motor2speed = constrain(motor2speed,-400,400);
-  motor3speed = constrain(motor3speed,-400,400);
-  motor4speed = constrain(motor4speed,-400,400);
-
- /*
-  motor1speed += motor1speedR;
-  motor2speed += motor2speedR;
-  motor3speed += motor3speedR;
-  motor4speed += motor4speedR;
-*/
-
-
-
-  
-  currentMotor1speed = brownOutPrevent(currentMotor1speed, motor1speed);
-  currentMotor2speed = brownOutPrevent(currentMotor2speed, motor2speed);
-  currentMotor3speed = brownOutPrevent(currentMotor3speed, motor3speed);
-  currentMotor4speed = brownOutPrevent(currentMotor4speed, motor4speed);
-  currentZspeed = brownOutPrevent(currentZspeed, Z);
-
-//limiting code end
-
-  motor_1(currentMotor1speed); // write motorspeeds
-  motor_2(currentMotor2speed);
-  motor_3(currentMotor3speed);
-  motor_4(currentMotor4speed);
-  motor_5(currentZspeed);
-  if(CHECK_BIT(buttons, 1)){motor_6(currentZspeed);}
-  else{motor_6(currentZspeed);}
-  Serial.println(motor1speed);
-  Serial.println(motor2speed);
-  Serial.println(motor3speed);
-  Serial.println(motor4speed);
-  Serial.println(currentZspeed);
-  
+  if (DEBUG) {
+    Serial.print("Motor A: ");
+    Serial.println(motorA.attached());
+    Serial.println(previous_speed_A);
+    Serial.print("Motor B: ");
+    Serial.println(motorB.attached());
+    Serial.println(previous_speed_B);
+    Serial.print("Motor E: ");
+    Serial.println(motorE.attached());
+    Serial.println(previous_speed_E);
+    Serial.print("Motor F: ");
+    Serial.println(motorF.attached());
+    Serial.println(previous_speed_F);
+    Serial.print("Motor CD: ");
+    Serial.println(motorC.attached());
+    Serial.println(previous_speed_Z);
+  }
 }
 
-int brownOutPrevent(int currentSpeed, int targetSpeed){   //Comments use 20 for MOTORACCELERATIONMAX
-  //adding change limiting code here
-  if((targetSpeed - currentSpeed)> MOTORACCELERATIONMAX){   //If target is over 20 above, only increase by 20
-    return currentSpeed + MOTORACCELERATIONMAX; 
-  } else if((currentSpeed - targetSpeed)> MOTORACCELERATIONMAX){ //Else, If target is over 20 below, only decrease by 20
-    return currentSpeed - MOTORACCELERATIONMAX;
-  } 
-  else {
-    return targetSpeed; //Else, it is okay to set to target
+int brownOutPrevent(int currentSpeed, int targetSpeed)
+{ // This jerk constraint can help prevent brownouts
+  if ((targetSpeed - currentSpeed) > MOTOR_JERK_MAX)
+  { //If target is over 20 above, only increase by 20
+    return currentSpeed + MOTOR_JERK_MAX;
+  }
+  else if ((currentSpeed - targetSpeed) > MOTOR_JERK_MAX)
+  { //If target is over 20 below
+    return currentSpeed - MOTOR_JERK_MAX;
+  }
+  else
+  { // it is okay to set to target
+    return targetSpeed;
   }
 }
 
