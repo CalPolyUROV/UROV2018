@@ -83,11 +83,12 @@ imu::Vector<3> euler;
 //SoftwareSerial Serial3(14, 15);
 
 void setup() {
+  // Serial Comms
   Serial3.begin(SERIAL3_BAUD);   //the number in here is the baud rate, it is the communication speed, this must be matched in the python
   Serial.begin(SERIAL_BAUD);     //it does not seem to work at lower baud rates
 
-  //pinMode(13, OUTPUT); // LED
   
+  // Thrusters
   pinMode(MOTOR_A_PIN, OUTPUT); // motor PWM
   pinMode(MOTOR_B_PIN, OUTPUT); // motor PWM
   pinMode(MOTOR_C_PIN, OUTPUT); // motor PWM
@@ -97,7 +98,7 @@ void setup() {
   
   motorSetup();
   
-  //delay(5000);
+  // Accelerometer
   if (!bno.begin())
   {
     /* There was a problem detecting the BNO055 ... check your connections */
@@ -119,8 +120,10 @@ void setup() {
     bno.setExtCrystalUse(true);
   }
 
+  if(DEBUG)
+  {
   Serial.println("Setup complete");
-
+  }
 }
 
 //looks cleaner than the empty while loop being everywhere in the code
@@ -281,9 +284,9 @@ void writeToCommand(Input i) {
 
 void debugInput(Input i) {
   //the following is for debugging, prints all input back out on the serial used for programming the arduino
-  Serial.print("Buttons: ");
+  Serial.print("Buttons2: ");
   Serial.print(i.buttons2);
-  Serial.print(" ");
+  Serial.print(" Buttons1: ");
   Serial.print(i.buttons1);
   Serial.print(" X1: ");
   Serial.print(i.primaryX);
