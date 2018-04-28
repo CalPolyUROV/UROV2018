@@ -116,7 +116,7 @@ class Controller:
         self.deadZone = value
 
     def getValueForButton(self, button):
-        return {
+        buttonList = {
             A:A_HEX,
             B:B_HEX,
             X: X_HEX,
@@ -127,7 +127,34 @@ class Controller:
             START: START_HEX,
             L_JOYSTICK_CLICK: L_JOYSTICK_CLICK_HEX,
             R_JOYSTICK_CLICK: R_JOYSTICK_CLICK_HEX
-        }.get(button, 0)
+        }
+        result = buttonList.get(button, 0)
+        buttonPress(result)
+        return result
+
+    def buttonPress(self, buttonValue):
+        if (buttonValue == 0x1):
+            print("Button A Pressed")
+        elif (buttonValue == 0x2):
+            print("Button B Pressed")
+        elif (buttonValue == 0x4):
+            print("Button X Pressed")
+        elif (buttonValue == 0x8):
+            print("Button Y Pressed")
+        elif (buttonValue == 0x10):
+            print("Left Trigger Pressed")
+        elif (buttonValue == 0x20):
+            print("Right Trigger Pressed")
+        elif (buttonValue == 0x40):
+            print("Back Button Pressed")
+        elif (buttonValue == 0x100):
+            print("Start Button Pressed")
+        elif (buttonValue == 0x200):
+            print("Left Joystick Click")
+        elif (buttonValue == 0x400):
+            print("Right Joystick Click")
+        else:
+            print("BUTTON DETECTION ERROR")
 
     # This creates a dead zone to prevent situations where you are unable to stop the motors because of touchy input
     def applyDeadZone(self, value):
