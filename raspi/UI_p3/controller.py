@@ -50,7 +50,7 @@ class Controller:
     #@retval: None
     def __init__(self, UI):
         self.Joystick = 0;
-        self.deadZone = 15
+        self.deadZone = 20
         self.minValue = 0
         self.maxValue = 400
         foundController = False
