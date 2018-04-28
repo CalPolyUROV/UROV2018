@@ -1,0 +1,20 @@
+Robot:  6 Thrusters, camera switching, camera servo
+
+Surface: 
+    XBox controller
+        Left stick
+            left-right: move left-right
+            up-down: move forward-back
+            click: switch to next camera
+        Right stick
+            left-right: turn left-right
+            up-down: rotate camera up-down
+        Left trigger: move down
+        Right trigger: move up
+        
+        
+    to document:
+    right button: autopilot
+    start button: change thruster power level
+        
+
