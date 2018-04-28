@@ -207,6 +207,7 @@ while True:
             while counter > 0:
                 counter -= 1
                 if outbound.readable():
+                    print("Reading from RS422")
                     if "STR" == outbound.read(3):
                         proceed = True
                         if timer_started:
