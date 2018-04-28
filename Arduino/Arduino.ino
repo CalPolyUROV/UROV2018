@@ -3,6 +3,8 @@
 #include <Servo.h>
 #include <Wire.h>
 
+#include "Settings.h"
+
 #include "Math.h"
 #include "Accelerometer.h"
 #include "dataStruct.h"
@@ -27,34 +29,10 @@
 
 #include "DallasTemperature.h"
 
-//---------------FEATURES:--------------------
-//-- set true or false to enable or disable --
-//--------------------------------------------
-#define REPORT_PRESSURE false
-#define REPORT_VOLTAGE false
-#define REPORT_TEMPERATURE false
-#define REPORT_ACCEL true
-#define REPORT_DEPTH false
-#define REPORT_YPR true
-#define REPORT_AMPERAGE false
 
-#define DEBUG false
-//-- end features-----------------------------
-
-#define SERIAL_BAUD 19200
-#define SERIAL3_BAUD 9600
-
-//--Pinouts:---------------------------------
 
 // Motors
-/* OLD:
-#define MOTOR_SIGNAL_PIN_0 2
-#define MOTOR_SIGNAL_PIN_1 3
-#define MOTOR_SIGNAL_PIN_2 6
-#define MOTOR_SIGNAL_PIN_3 7
-#define MOTOR_SIGNAL_PIN_4 6
-#define MOTOR_SIGNAL_PIN_5 7
-*/
+
 /* NEW:
        +---------+
        | CAMERA  |
@@ -69,28 +47,7 @@
   +-------------------+
      | TETHER CONN |
      +-------------+
-
-     Current guesses:
-     thruster=motor=pin
-     a=1=2
-     b=2=3
-     c=5=6
-     d=6=7
-     e=3=4
-     f=4=5
 */
-#define MOTOR_A_PIN 2
-#define MOTOR_B_PIN 3
-#define MOTOR_C_PIN 6
-#define MOTOR_D_PIN 7
-#define MOTOR_E_PIN 4
-#define MOTOR_F_PIN 5
-
-// Cameras pins define in cameras.cpp
-// CAMERA_ENABLE_PIN 44
-// CAMERA_SEL_PIN_C 45
-// CAMERA_SEL_PIN_B 46
-// CAMERA_SEL_PIN_A 47
 
 // Data wire is plugged into pin 26 on the Arduino
 #define ONE_WIRE_BUS 3

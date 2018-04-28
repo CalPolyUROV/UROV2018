@@ -4,11 +4,7 @@
 #include "Arduino.h"
 #include "VectorMotors.h"
 
-#define DEBUG true
-
-#define MOTOR_INPUT_MIN 15
-#define MOTOR_JERK_MAX 80
-/* crazy people use 80, og version used 20 */
+#include "Settings.h"
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 //20 motor speed unit things per interval (maybe change to dv/dt later)
@@ -29,19 +25,6 @@
      +-------------+
 
 */
-#define MOTOR_A_PIN 8
-#define MOTOR_B_PIN 9
-#define MOTOR_C_PIN 12
-#define MOTOR_D_PIN 13
-#define MOTOR_E_PIN 10
-#define MOTOR_F_PIN 11
-
-#define MOTOR_A_DIR 1
-#define MOTOR_B_DIR 1
-#define MOTOR_C_DIR 1
-#define MOTOR_D_DIR 1
-#define MOTOR_E_DIR 1
-#define MOTOR_F_DIR 1
 
 ///////////connecting the ESC to the arduino (switch the pin to the one in use)
 

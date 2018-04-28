@@ -4,16 +4,11 @@
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
 
-#define NUM_CAMERAS 1
+#include "cameras.h"
+#include "Settings.h"
 
-// Cameras
-#define CAMERA_ENABLE_PIN 44
-#define CAMERA_SEL_PIN_C 45
-#define CAMERA_SEL_PIN_B 46
-#define CAMERA_SEL_PIN_A 47
 
 //camera pins
-int camera_enable = CAMERA_ENABLE_PIN;
 
 int currentCamera = 0;
 bool debounce = 0;
