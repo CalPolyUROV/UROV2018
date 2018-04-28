@@ -87,7 +87,6 @@ void setup() {
   Serial3.begin(SERIAL3_BAUD);   //the number in here is the baud rate, it is the communication speed, this must be matched in the python
   Serial.begin(SERIAL_BAUD);     //it does not seem to work at lower baud rates
 
-  
   // Thrusters
   pinMode(MOTOR_A_PIN, OUTPUT); // motor PWM
   pinMode(MOTOR_B_PIN, OUTPUT); // motor PWM
@@ -95,9 +94,18 @@ void setup() {
   pinMode(MOTOR_D_PIN, OUTPUT); // motor PWM
   pinMode(MOTOR_E_PIN, OUTPUT); // motor PWM
   pinMode(MOTOR_F_PIN, OUTPUT); // motor PWM
-  
   motorSetup();
+
+  //Cameras
+  pinMode(CAMERA_SERVO_PIN, OUTPUT);
   
+  pinMode(CAMERA_ENABLE_PIN, OUTPUT);
+  pinMode(CAMERA_SEL_PIN_C, OUTPUT);
+  pinMode(CAMERA_SEL_PIN_B, OUTPUT);
+  pinMode(CAMERA_SEL_PIN_A, OUTPUT);
+
+  camera_setup();
+
   // Accelerometer
   if (!bno.begin())
   {
@@ -105,10 +113,8 @@ void setup() {
     Serial.println("Ooops, no BNO055 detected ... Check your wiring or I2C ADDR!");
     //while (1);
   }
-
   sensors.begin(); // IC Default 9 bit. If you have troubles consider upping it 12.
   //Ups the delay giving the IC more time to process the temperature measurement
-
   if (REPORT_YPR) //if using accel and orrientation,
   {
     if (!bno.begin())
@@ -177,7 +183,8 @@ Input readBuffer() {
 
 void processInput(Input i)
 {
-  setCameras(i.buttons1);
+  setCameras(i.buttons1, i.secondaryY);
+  //setMotors(X, Y, Z, R, buttons)
   setMotors(i.primaryX, i.primaryY, i.triggers, i.secondaryX, i.buttons1);
 }
 
