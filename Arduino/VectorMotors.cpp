@@ -93,53 +93,51 @@ void motorSetup()
 
 void motor_A(int mspeed)
 {
-  motorA.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
+  motorA.writeMicroseconds(map(mspeed, MOTOR_A_DIR * -400, MOTOR_A_DIR * 400, 1100, 1900));
 }
 
 void motor_B(int mspeed)
 {
-  motorB.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
+  motorB.writeMicroseconds(map(mspeed, MOTOR_B_DIR * -400, MOTOR_B_DIR * 400, 1100, 1900));
 }
 
 void motor_C(int mspeed)
 {
-  motorC.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
+  motorC.writeMicroseconds(map(mspeed, MOTOR_C_DIR * -400, MOTOR_C_DIR * 400, 1100, 1900));
 }
 
 void motor_D(int mspeed)
 {
-  motorD.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
+  motorD.writeMicroseconds(map(mspeed, MOTOR_D_DIR * -400, MOTOR_D_DIR * 400, 1100, 1900));
 }
 
 void motor_E(int mspeed)
 {
-  motorE.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
+  motorE.writeMicroseconds(map(mspeed, MOTOR_E_DIR * -400, MOTOR_E_DIR * 400, 1100, 1900));
 }
 
 void motor_F(int mspeed)
 {
-  motorF.writeMicroseconds(map(mspeed, -400, 400, 1100, 1900));
+  motorF.writeMicroseconds(map(mspeed, (MOTOR_F_DIR * -400), MOTOR_F_DIR * 400, 1100, 1900));
 }
 
 
 // allow rotation and planar movement simultaniously (takes x y z and r, then sets motorspeeds)
 void setMotors(int X, int Y, int Z, int R, unsigned char buttons)
 {
-  motor_speed_A = constrain((((     MOTOR_A_DIR * Y)
-                              + (MOTOR_A_DIR * X)) / 2)
+  motor_speed_A = constrain(((Y + X) / 2)
                             + (R / 2), -400, 400);
 
-  motor_speed_B = constrain((((     MOTOR_B_DIR * Y)
-                              - (MOTOR_B_DIR * X)) / 2)
+  motor_speed_B = constrain(((Y - X) / 2)
                             - (R / 2), -400, 400);
 
-  motor_speed_E = constrain((((-1 * MOTOR_E_DIR * Y)
-                              + (MOTOR_E_DIR * X)) / 2)
+  motor_speed_E = constrain((((-1 * Y) + X) / 2)
                             - (R / 2), -400, 400);
 
-  motor_speed_F = constrain((((-1 * MOTOR_F_DIR * Y)
-                              - (MOTOR_F_DIR * X)) / 2)
+  motor_speed_F = constrain((((-1 * Y) - X) / 2)
                             + (R / 2), -400, 400);
+
+  motor_speed_Z = constrain(Z, -400, 400);
 
   previous_speed_A = brownOutPrevent(previous_speed_A, motor_speed_A);
   previous_speed_B = brownOutPrevent(previous_speed_B, motor_speed_B);
