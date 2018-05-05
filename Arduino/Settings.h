@@ -12,7 +12,7 @@
 #define REPORT_YPR true
 #define REPORT_AMPERAGE false
 
-#define DEBUG false
+#define DEBUG true
 //-- end features-----------------------------
 
 //--Pinouts:---------------------------------
