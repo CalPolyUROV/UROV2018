@@ -156,6 +156,15 @@ void setMotors(int X, int Y, int Z, int R, unsigned char buttons)
   motor_D(previous_speed_Z);
 
   if (DEBUG) {
+    Serial.print("X: ");
+    Serial.println(X);
+    Serial.print("Y: ");
+    Serial.println(Y);
+    Serial.print("Z: ");
+    Serial.println(Z);
+    Serial.print("R: ");
+    Serial.println(R);
+    
     Serial.print("Motor A: ");
     Serial.println(motorA.attached());
     Serial.println(previous_speed_A);
