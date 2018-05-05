@@ -33,7 +33,7 @@
 //--Settings--------------------------------
 //Comms Baudrates
 #define SERIAL_BAUD 19200
-#define SERIAL3_BAUD 9600
+#define SERIAL3_BAUD 9600 // For the Tether
 //Motors
 #define MOTOR_A_DIR 1
 #define MOTOR_B_DIR 1

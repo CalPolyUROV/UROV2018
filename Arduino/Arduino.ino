@@ -54,13 +54,10 @@ int pch;
 int rol;
 float fast;
 
-uint16_t amperages[8] = {0};
-uint16_t* p_amperages;
+//uint16_t amperages[8] = {0};
+//uint16_t* p_amperages;
 
 imu::Vector<3> euler;
-
-
-//SoftwareSerial Serial3(14, 15);
 
 void setup() {
   // Serial Comms
@@ -199,11 +196,11 @@ void writeToCommand(Input i) {
   }
   if (REPORT_TEMPERATURE) {
 
-    Serial3.println("TMP"); //tell it the next line is Temperature
+   // Serial3.println("TMP"); //tell it the next line is Temperature
     //coms.sendSlaveCmd(GET_TEMP);
-    sensors.requestTemperatures(); // Send the command to get temperatures
-    fast = (sensors.getTempCByIndex(0));
-    Serial3.println(fast);
+//    sensors.requestTemperatures(); // Send the command to get temperatures
+   // fast = (sensors.getTempCByIndex(0));
+   // Serial3.println(fast);
     //Serial3.println(((float)analogRead(A0)/(2.048))-273.15);
     //Serial3.print(coms.getSlaveData());
     //Serial3.println(" degrees C");
