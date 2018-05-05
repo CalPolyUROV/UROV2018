@@ -5,8 +5,6 @@
 
 #include "Settings.h"
 
-#include "Math.h"
-#include "Accelerometer.h"
 #include "dataStruct.h"
 
 //#include "QuadMotorShields.h"
@@ -14,7 +12,6 @@
 #include "gyroAccelerometer.h"
 #include "pressure.h"
 
-//#include "ComsMasterArd.h"
 #include "VectorMotors.h"
 #include "cameras.h"
 #include "toolMotor.h"
@@ -24,6 +21,10 @@
 #include "Adafruit_Sensor.h"
 #include "Adafruit_BNO055.h"
 #include "imumaths.h"
+#include "Math.h"
+#include "Accelerometer.h"
+
+//#include "ComsMasterArd.h"
 
 //Declarations for temp readings
 #include <OneWire.h>
@@ -41,11 +42,6 @@ OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 
 Adafruit_BNO055 bno = Adafruit_BNO055();
-
-//all pins used must be listed here as a comment if it is in another file
-
-// I2C pins 20 and 21 for BNO055
-// SDA, SCL to
 
 //CHANGE//ComsMasterArd coms;
 //QuadMotorShields md;//Not being used anymore
@@ -81,7 +77,6 @@ void setup() {
   pinMode(CAMERA_SEL_PIN_C, OUTPUT);
   pinMode(CAMERA_SEL_PIN_B, OUTPUT);
   pinMode(CAMERA_SEL_PIN_A, OUTPUT);
-
   camera_setup();
 
   //Tool Motor
