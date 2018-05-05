@@ -47,7 +47,7 @@
 /* crazy people use 80, og version used 20 */
 
 //Cameras
-#define NUM_CAMERAS 1
+#define NUM_CAMERAS 2
 #define CAMERA_ENABLE true
 #define CAMERA_ANGLE_DELTA 15
 
