@@ -126,17 +126,17 @@ void motor_F(int mspeed)
 // allow rotation and planar movement simultaniously (takes x y z and r, then sets motorspeeds)
 void setMotors(int X, int Y, int Z, int R, unsigned char buttons)
 {
-  motor_speed_A = constrain(((Y + X) / 2)
-                            + (R / 2), -400, 400);
+  motor_speed_A = constrain(((Y + X) / 1)
+                            + (R / 1), -400, 400);
 
-  motor_speed_B = constrain(((Y - X) / 2)
-                            - (R / 2), -400, 400);
+  motor_speed_B = constrain(((Y - X) / 1)
+                            - (R / 1), -400, 400);
 
-  motor_speed_E = constrain((((-1 * Y) + X) / 2)
-                            - (R / 2), -400, 400);
+  motor_speed_E = constrain((((-1 * Y) + X) / 1)
+                            - (R / 1), -400, 400);
 
-  motor_speed_F = constrain((((-1 * Y) - X) / 2)
-                            + (R / 2), -400, 400);
+  motor_speed_F = constrain((((-1 * Y) - X) / 1)
+                            + (R / 1), -400, 400);
 
   motor_speed_Z = constrain(Z, -400, 400);
 
