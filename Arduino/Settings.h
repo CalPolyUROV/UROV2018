@@ -37,12 +37,12 @@
 //Motors
 #define MOTOR_A_DIR 1
 #define MOTOR_B_DIR 1
-#define MOTOR_C_DIR 1
+#define MOTOR_C_DIR -1
 #define MOTOR_D_DIR 1
 #define MOTOR_E_DIR -1
 #define MOTOR_F_DIR 1
 
-#define MOTOR_INPUT_MIN 15
+//#define MOTOR_INPUT_MIN 15 // Not yet implemented
 #define MOTOR_JERK_MAX 50
 /* crazy people use 80, og version used 20 */
 

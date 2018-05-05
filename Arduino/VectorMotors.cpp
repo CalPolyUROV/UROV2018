@@ -7,6 +7,7 @@
 #include "Settings.h"
 
 #define CHECK_BIT(var,pos) ((var) & (1<<(pos)))
+
 //20 motor speed unit things per interval (maybe change to dv/dt later)
 
 /* NEW PINOUT:

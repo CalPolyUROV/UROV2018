@@ -29,26 +29,6 @@
 
 #include "DallasTemperature.h"
 
-
-
-// Motors
-
-/* NEW:
-       +---------+
-       | CAMERA  |
-  +-------------------+
-  |A||   FORWARD   ||B|
-  +--|             |--+
-  +--|             |--+
-  |C||  VERTICAL   ||D|
-  +--|             |--+
-  +--|             |--+
-  |E||  BACKWARD   ||F|
-  +-------------------+
-     | TETHER CONN |
-     +-------------+
-*/
-
 // Data wire is plugged into pin 26 on the Arduino
 #define ONE_WIRE_BUS 3
 //--End Pinout---------------------------------
