@@ -42,6 +42,10 @@
 #define MOTOR_E_DIR -1
 #define MOTOR_F_DIR 1
 
+#define TOOL_MOTOR_PWM_PIN 7
+#define TOOL_MOTOR_FWD_PIN 28
+#define TOOL_MOTOR_BWD_PIN 29
+
 //#define MOTOR_INPUT_MIN 15 // Not yet implemented
 #define MOTOR_JERK_MAX 50
 /* crazy people use 80, og version used 20 */

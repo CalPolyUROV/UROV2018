@@ -17,6 +17,7 @@
 //#include "ComsMasterArd.h"
 #include "VectorMotors.h"
 #include "cameras.h"
+#include "toolMotor.h"
 
 //#include "currentSensing.h"
 
@@ -82,6 +83,12 @@ void setup() {
   pinMode(CAMERA_SEL_PIN_A, OUTPUT);
 
   camera_setup();
+
+  //Tool Motor
+  pinMode(TOOL_MOTOR_PWM_PIN, OUTPUT);
+  pinMode(TOOL_MOTOR_FWD_PIN, OUTPUT);
+  pinMode(TOOL_MOTOR_BWD_PIN, OUTPUT);
+  tool_motor_setup();
 
   // Accelerometer
   if (!bno.begin())
@@ -163,6 +170,7 @@ void processInput(Input i)
   setCameras(i.buttons1, i.secondaryY);
   //setMotors(X, Y, Z, R, buttons)
   setMotors(i.primaryX, i.primaryY, i.triggers, i.secondaryX, i.buttons1);
+  set_tool_motor(i.buttons1);
 }
 
 void writeToCommand(Input i) {
