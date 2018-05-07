@@ -17,4 +17,18 @@ Surface:
     right button: autopilot
     start button: change thruster power level
         
-
+Buttonsn1:
+            
+Buttons2:   1: power factor (start button)
+            # These are their values in the signal sent to the arduino
+A_HEX = 0x1
+B_HEX = 0x2
+X_HEX = 0x4
+Y_HEX = 0x8
+L_TRIGGER_HEX = 0x10
+R_TRIGGER_HEX = 0x20
+BACK_HEX = 0x40
+BROKEN_HEX = 0x80   # this hex signal over serial seems to lag the arduino by a second, so we are not using it, ever
+START_HEX = 0x1-00
+L_JOYSTICK_CLICK_HEX = 0x2-00
+R_JOYSTICK_CLICK_HEX = 0x4-00
