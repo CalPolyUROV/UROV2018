@@ -17,15 +17,11 @@ void tool_motor_setup()
 
 void set_direction()
 {
-  if (motor_direction_fwd)
-  {
-
+  if (motor_direction_fwd) {
     digitalWrite(TOOL_MOTOR_FWD_PIN, HIGH);
     digitalWrite(TOOL_MOTOR_BWD_PIN, LOW);
   }
-  else
-  {
-
+  else {
     digitalWrite(TOOL_MOTOR_FWD_PIN, LOW);
     digitalWrite(TOOL_MOTOR_BWD_PIN, HIGH);
   }
@@ -33,7 +29,7 @@ void set_direction()
 
 void set_tool_motor(unsigned char buttons)
 {
-  if (CHECK_BIT(buttons, 3) /* && debounce */)
+  if (CHECK_BIT(buttons, 1) /* && debounce */)
   {
     if (motor_speed != FULL_SPEED)
     {
