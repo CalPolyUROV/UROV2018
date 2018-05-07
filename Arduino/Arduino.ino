@@ -58,7 +58,7 @@ imu::Vector<3> euler;
 
 void setup() {
   // Serial Comms
-  Serial3.begin(SERIAL3_BAUD);   //the number in here is the baud rate, it is the communication speed, this must be matched in the python
+  Serial3.begin(SERIAL3_BAUD, SERIAL_8N1);   //the number in here is the baud rate, it is the communication speed, this must be matched in the python
   Serial.begin(SERIAL_BAUD);     //it does not seem to work at lower baud rates
 
   // Thrusters
