@@ -72,7 +72,7 @@ void setup() {
 
   //Cameras
   pinMode(CAMERA_SERVO_PIN, OUTPUT);
-  
+
   pinMode(CAMERA_ENABLE_PIN, OUTPUT);
   pinMode(CAMERA_SEL_PIN_C, OUTPUT);
   pinMode(CAMERA_SEL_PIN_B, OUTPUT);
@@ -105,22 +105,22 @@ void setup() {
     bno.setExtCrystalUse(true);
   }
 
-  if(DEBUG)
+  if (DEBUG)
   {
-  Serial.println("Setup complete");
+    Serial.println("Setup complete");
   }
 }
 
 //looks cleaner than the empty while loop being everywhere in the code
 void wait() {
-  while (!(Serial3.available() > 0));
+  while (!Serial3.available());
 }
 
 //detects the start signal without accidently overshooting it because of short circuting logic
 //except for input such as SSTR, that will be skipped. There should be multiple characters to
 //prevent random bytes getting past
 void waitForStart() {
-  return;  //short circuit
+  // return;  //short circuit
   while (true) {
     wait();
     if ('S' == Serial3.read()) {
@@ -138,10 +138,19 @@ void waitForStart() {
 
 Input readBuffer() {
   Input input;
+  waitForStart();
   wait();//makes sure that a byte of data is not missed
-  input.buttons1 = Serial3.read();
+  input.buttons1 = (unsigned char) Serial3.parseInt();
+  Serial3.read();
   wait();
-  input.buttons2 = Serial3.read();
+  input.buttons2 = (unsigned char) Serial3.parseInt();
+  if(input.buttons2 == 83)
+  {
+    input.buttons1 = (unsigned char) Serial3.parseInt();
+    wait();
+    input.buttons2 = (unsigned char) Serial3.parseInt();
+  }
+  Serial3.read();
   wait();
   input.primaryX = Serial3.parseInt();
   Serial3.read();
@@ -162,14 +171,13 @@ Input readBuffer() {
 
 void processInput(Input i)
 {
-  setCameras(i.buttons1, i.secondaryY);
+  setCameras(i.buttons2, i.secondaryY);
   //setMotors(X, Y, Z, R, buttons)
-  setMotors(i.primaryX, i.primaryY, i.triggers, i.secondaryX, i.buttons1);
-  set_tool_motor(i.buttons1);
+  setMotors(i.primaryX, i.primaryY, i.triggers, i.secondaryX, i.buttons2);
+  set_tool_motor(i.buttons2);
 }
 
 void writeToCommand(Input i) {
-  Serial3.print("STR");
   int lines = 0;
   if (REPORT_PRESSURE) lines += 2;
   if (REPORT_VOLTAGE) lines += 2;
@@ -179,6 +187,7 @@ void writeToCommand(Input i) {
   if (REPORT_YPR) lines += 6;
   String numberOfLines = String(lines);
   int counter = 0;
+  Serial3.print("STR");
   while ((counter + numberOfLines.length()) != 3) // pad zeros in front
   {
     Serial3.print("0");
@@ -199,11 +208,11 @@ void writeToCommand(Input i) {
   }
   if (REPORT_TEMPERATURE) {
 
-   // Serial3.println("TMP"); //tell it the next line is Temperature
+    // Serial3.println("TMP"); //tell it the next line is Temperature
     //coms.sendSlaveCmd(GET_TEMP);
-//    sensors.requestTemperatures(); // Send the command to get temperatures
-   // fast = (sensors.getTempCByIndex(0));
-   // Serial3.println(fast);
+    //    sensors.requestTemperatures(); // Send the command to get temperatures
+    // fast = (sensors.getTempCByIndex(0));
+    // Serial3.println(fast);
     //Serial3.println(((float)analogRead(A0)/(2.048))-273.15);
     //Serial3.print(coms.getSlaveData());
     //Serial3.println(" degrees C");
@@ -225,17 +234,7 @@ void writeToCommand(Input i) {
     Serial3.println(roll);
 
 
-    if (DEBUG) {
-      Serial.print("YAW: ");
-      Serial.println(yaw);
     
-      Serial.print("PCH: ");
-      Serial.println(pitch);
-    
-      Serial.print("ROL: ");
-      Serial.println(roll);
-
-    }
   }
   if (REPORT_ACCEL) {
     Serial3.println("ACL"); //tell it the next line is Accelerometer
@@ -258,6 +257,7 @@ void writeToCommand(Input i) {
     Serial3.print(" Z: ");
     Serial3.print(getMagZ());
     Serial3.println();
+    
   }
   if (REPORT_DEPTH) {
     // BROKEN
@@ -271,10 +271,11 @@ void writeToCommand(Input i) {
 
 void debugInput(Input i) {
   //the following is for debugging, prints all input back out on the serial used for programming the arduino
-  Serial.print("Buttons2: ");
-  Serial.print(i.buttons2);
-  Serial.print(" Buttons1: ");
-  Serial.print(i.buttons1);
+
+  Serial.print(" Buttons: ");
+  Serial.print(i.buttons1, BIN);
+  Serial.print("-");
+  Serial.print(i.buttons2, BIN);
   Serial.print(" X1: ");
   Serial.print(i.primaryX);
   Serial.print(" Y1: ");
@@ -288,22 +289,23 @@ void debugInput(Input i) {
 }
 
 void loop()
-{
-  Serial.print("Starting loop code: serial3 avaiable:");
-  Serial.println(Serial3.available());
+{ /*
+    Serial.print("Starting loop code: serial3 avaiable:");
+    Serial.println(Serial3.available()); */
   if (Serial3.available() > 0)
   {
-    waitForStart();
+    
     Input i = readBuffer();
     if (DEBUG)
     {
-      Serial.println("debugging input");
+      Serial.println(i.buttons1);
+      Serial.println(i.buttons2);
       debugInput(i);
     }
     writeToCommand(i); //this is where the code to write back to topside goes.
     Serial3.flush();
     //sensors.requestTemperatures();
-    delay(50);       
+    delay(50);
 
     processInput(i);//gives the inputs to the motors
   }
