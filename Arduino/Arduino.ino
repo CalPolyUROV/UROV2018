@@ -232,9 +232,6 @@ void writeToCommand(Input i) {
 
     Serial3.println("ROL");
     Serial3.println(roll);
-
-
-    
   }
   if (REPORT_ACCEL) {
     Serial3.println("ACL"); //tell it the next line is Accelerometer
@@ -257,7 +254,6 @@ void writeToCommand(Input i) {
     Serial3.print(" Z: ");
     Serial3.print(getMagZ());
     Serial3.println();
-    
   }
   if (REPORT_DEPTH) {
     // BROKEN
@@ -294,7 +290,6 @@ void loop()
     Serial.println(Serial3.available()); */
   if (Serial3.available() > 0)
   {
-    
     Input i = readBuffer();
     if (DEBUG)
     {
