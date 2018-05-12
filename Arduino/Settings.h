@@ -47,7 +47,7 @@
 #define TOOL_MOTOR_BWD_PIN 29
 
 //#define MOTOR_INPUT_MIN 15 // Not yet implemented
-#define MOTOR_JERK_MAX 50
+#define MOTOR_JERK_MAX 35
 /* crazy people use 80, og version used 20 */
 
 //Cameras
