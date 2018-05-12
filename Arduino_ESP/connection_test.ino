@@ -28,10 +28,11 @@ void setup() {
   //sendData("GET\r\n", 3000, DEBUG);
   delay(1500);
   while(1){
+    // these commands are used to read data from the website
     sendData("AT+CIPSEND=3\r\n",5000, false);
     data = sendData("GET\r\n", 5000,DEBUG);
-    parse_angles(data, angles, true);
     
+    parse_angles(data, angles, true); //parses angles from read data
     data = sendData("AT\r\n", 5000,DEBUG);
   
     if(data.length() > 20) {
