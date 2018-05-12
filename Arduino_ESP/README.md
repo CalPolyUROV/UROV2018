@@ -1,7 +1,8 @@
 # Arduino-ESP Communication Information
     
 This readme explains how to control and communicate with an ESP8266 using an Arduino. I hope that this functions as a quick 
-intro to help you start developing as fast as possible.
+intro to help you start developing as fast as possible. The Arduino projects included here are examples of how to communicate
+with the Arduino. 
 
 ## Hardware Setup
 
