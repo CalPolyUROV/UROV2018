@@ -5,8 +5,8 @@ intro to help you start developing as fast as possible.
 
 ## Hardware Setup
 
-On newer ESP8266, you may need a 10k pull-up resistor on the reset and chip select pins. See the Graphical Datasheet on the 
-Sparkfun Docs link for pins.
+On newer ESP8266, you may need a 10k pull-up resistor on the reset (RST, pin6) and chip select (CHPD, pin 4) pins. 
+See the Graphical Datasheet on the Sparkfun Docs link for pins.
 
 Older ESP have 9600 baud setup as default, however more recently made ESPs will have a default value of 115200 baud. Most 
 Arduinos do not support 115200 baud so you will have to setup the baudrate without the Arduino. I recommend connecting the ESP 
